@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.hetu.core</groupId>
+        <artifactId>presto-root</artifactId>
+        <version>1.0.1</version>
+    </parent>
+
+    <artifactId>hetu-hwcface</artifactId>
+    <description>Hetu - HwaWeiCloudFaceRecognitionService Plugin</description>
+    <packaging>hetu-plugin</packaging>
+
+    <properties>
+        <air.main.basedir>${project.parent.basedir}</air.main.basedir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.huaweicloud.frs</groupId>
+            <artifactId>frs-sdk</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!--        <dependency>-->
+        <!--            <groupId>com.huaweicloud.frs</groupId>-->
+        <!--            <artifactId>frs-sdk</artifactId>-->
+        <!--            <version>1.0</version>-->
+        <!--            <scope>system</scope>-->
+        <!--            <systemPath>${project.basedir}/lib/frs-sdk-1.0-jar-with-dependencies.jar</systemPath>-->
+        <!--        </dependency>-->
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <!-- Presto SPI -->
+        <dependency>
+            <groupId>io.hetu.core</groupId>
+            <artifactId>presto-spi</artifactId>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.airlift</groupId>
+            <artifactId>slice</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.airlift</groupId>
+            <artifactId>units</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.hetu</groupId>
+                <artifactId>presto-maven-plugin</artifactId>
+                <version>9</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <skipCheckSpiDependencies>true</skipCheckSpiDependencies>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
