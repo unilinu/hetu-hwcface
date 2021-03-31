@@ -8,10 +8,15 @@
 
 根据[题目描述](https://www.oschina.net/question/4469669_2319949)设计AddFaceSet, AddFace, DelFace, DelFaceSet等基础函数构建人脸库，据此设计SearchFace以及赛题要求FaceScan函数进行人脸识别，并以插件形式集成在openLooKeng服务器上，可以通过CLI进行查询，完成赛题要求。
 
-<video controls>
+<!-- <video controls>
     <source src="data/hwcface_demo_video.mp4" type="video/mp4">
     基于VMware虚拟机的项目展示视频(MySQL用户表构造+UDF插件实现+UDF函数使用)
-</video>
+</video> -->
+
+> [基于VMware虚拟机的项目展示视频(MySQL用户表构造+UDF插件实现+UDF函数使用)](https://www.bilibili.com/video/BV18f4y1x7zx/)
+> <div align="center"><a href="https://www.bilibili.com/video/BV18f4y1x7zx/"><img src="data/hwcface_demo_result.png" alt="IMAGE ALT TEXT"></a></div>
+
+> `data/hwcface_demo_video.mp4`
 
 
 ## 软件架构
@@ -253,7 +258,6 @@ UDF函数定义在`hetu-hwcface/src/main/java/io/hetu/core/plugin/hwcface/HwcFac
 ```
 
 
-
 ### 4.  UDF函数使用
 
 可以通过`hwcface.<FunctionName>`在openLooKeng CLI中调用对应函数, 每个函数的使用测试见`scripts/test_face_udf.sql`
@@ -294,19 +298,11 @@ select hwcface.DelFaceSet('pml-test-faceset');
 
 ![demo_result](data/hwcface_demo_result.png)
 
-## 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
 
 ## 特技
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+1. 完整的人脸识别接口
+2. AI + SQL
+3. 云主机展示
+
+
