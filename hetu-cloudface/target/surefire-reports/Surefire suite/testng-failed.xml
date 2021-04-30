@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="2" verbose="0" name="Failed suite [Surefire suite]" parallel="methods">
+  <test name="Surefire test(failed)" parallel="methods">
+    <classes>
+      <class name="io.hetu.core.plugin.cloudface.TestFinal">
+        <methods>
+          <include name="TestSystem"/>
+          <include name="destroyTestFunctions"/>
+          <include name="registerFunctions"/>
+          <include name="initTestFunctions"/>
+        </methods>
+      </class> <!-- io.hetu.core.plugin.cloudface.TestFinal -->
+    </classes>
+  </test> <!-- Surefire test(failed) -->
+</suite> <!-- Failed suite [Surefire suite] -->

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<checkstyle version="8.16">
-<file name="/home/openlkadmin/hetu-core/hetu-hwcface/src/main/java/io/hetu/core/plugin/hwcface/HwcFacePlugin.java">
-</file>
-<file name="/home/openlkadmin/hetu-core/hetu-hwcface/src/main/java/io/hetu/core/plugin/hwcface/HwcFaceFunctions.java">
-</file>
-</checkstyle>

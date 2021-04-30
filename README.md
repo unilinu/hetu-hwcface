@@ -2,29 +2,37 @@
 
 <h2 id="intro">介绍</h2>
 
-> TOPIC_ID: 61, TEAM_ID:1269929257, TEAM_NAME: 紫金山实验室-北京邮电大学小分队.
+> TOPIC_ID: 61
+> TEAM_ID:1269929257
+> TEAM_NAME: 紫金山实验室-北京邮电大学小分队
 
 模拟公司考勤打卡场景，利用华为云[人脸识别服务(FRS)](https://support.huaweicloud.com/face/index.html)和openLooKeng[自定义SQL函数功能(UDF)](https://openlookeng.io/zh-cn/docs/docs/develop/functions.html)实现。
 
 根据[题目描述](https://www.oschina.net/question/4469669_2319949)设计AddFaceSet, AddFace, DelFace, DelFaceSet等基础函数构建人脸库，据此设计SearchFace以及赛题要求FaceScan函数进行人脸识别，并以插件形式集成在openLooKeng服务器上，可以通过CLI进行查询，完成赛题要求。
 
 <!-- <video controls>
-    <source src="data/hwcface_demo_video.mp4" type="video/mp4">
+    <source src="data/cloudface_demo_video.mp4" type="video/mp4">
     基于VMware虚拟机的项目展示视频(MySQL用户表构造+UDF插件实现+UDF函数使用)
 </video> -->
 
-> [基于VMware虚拟机的项目展示视频(MySQL用户表构造+UDF插件实现+UDF函数使用)](https://www.bilibili.com/video/BV18f4y1x7zx/)
-> <div align="center"><a href="https://www.bilibili.com/video/BV18f4y1x7zx/"><img src="data/hwcface_demo_result.png" alt="IMAGE ALT TEXT"></a></div>
-
-> `data/hwcface_demo_video.mp4`
+> <div align="center"><a href="https://www.bilibili.com/video/BV18f4y1x7zx/"><img src="data/cloudface_demo_result.png" alt="data/cloudface_demo_video.mp4"></a></div>
+> 基于VMware虚拟机的项目展示视频(MySQL用户表构造+UDF插件实现+UDF函数使用)
 
 
-## 软件架构
+## 方案设计
 
-![hwcface-arch](data/hwcface_arch.png)
+### 1.  系统架构
+
+![cloudface-arch](data/cloudface_arch.png)
 
 项目基于[openEuler](https://openeuler.org/zh/)操作系统，以UDF插件形式集成于[openLooKeng](https://openlookeng.io/)服务器，借此可连接MySQL数据库，统一处理和查询操作，为开发者用户提供简单但强大的SQL接口。
 
+### 2. 业务流程
+
+![cloudface-arch](data/flow_chart.png)
+
+1. 人脸录入流程：管理员上传人脸图片，录入MySQL人脸数据库，经过华为云AI处理得到华为云人脸库；
+2. 人脸检测流程：通过外部设备获取人脸图像，经华为云AI提取人脸特征，与华为云人脸库比对，若匹配则打卡成功，反之失败，流程结束。
 
 ## 安装教程
 
@@ -159,24 +167,33 @@ vim /opt/openlookeng/data/etc/catalog/mysql.properties
 # install local huaweicloud-sdk-java-frs
 cd /home/openlkadmin && git clone https://github.com/huaweicloud/huaweicloud-sdk-java-frs.git
 mvn install:install-file \
-   -Dfile=/home/openlkadmin/huaweicloud-sdk-java-frs/frs-sdk/target/frs-sdk-1.0-jar-with-dependencies.jar \
+   -Dfile=/home/openlkadmin/huaweicloud-sdk-java-frs/frs-sdk/target/frs-sdk-1.0.jar \
    -DgroupId=com.huaweicloud.frs \
    -DartifactId=frs-sdk \
    -Dversion=1.0 \
    -Dpackaging=jar \
    -DgeneratePom=true
+   
+mvn install:install-file \
+   -Dfile=/home/openlkadmin/huaweicloud-sdk-java-frs/frs-sdk/lib/java-sdk-core-3.0.9.jar \
+   -DgroupId=com.huawei \
+   -DartifactId=java-sdk-core \
+   -Dversion=3.0.9 \
+   -Dpackaging=jar \
+   -DgeneratePom=true
+
 
 # download sources
-git clone git clone https://gitee.com/openeuler2020/team-1269929257.git
-cp -r /home/openlkadmin/team-1269929257/hetu-hwcface/ /home/openlkadmin/hetu-core
+git clone https://gitee.com/openlookeng/hetu-core.git && git checkout 1.0.1
+git clone https://gitee.com/openeuler2020/team-1269929257.git
+cp -r /home/openlkadmin/team-1269929257/hetu-cloudface/ /home/openlkadmin/hetu-core
 
 # package from sources
-cd /home/openlkadmin/hetu-core/hetu-hwcface && mvn clean && mvn package -e
-ln -s /home/openlkadmin/hetu-core/hetu-hwcface/target/hetu-hwcface-1.0.1 /opt/openlookeng/hetu-server-1.0.1/plugin/hwcface
+cd /home/openlkadmin/hetu-core/hetu-cloudface && mvn clean && mvn package -e
+ln -s /home/openlkadmin/hetu-core/hetu-cloudface/target/hetu-cloudface-1.0.1 /opt/openlookeng/hetu-server-1.0.1/plugin/cloudface
 ### ----------- OR ---------- ###
 # use targer jar of repo
-git clone git clone https://gitee.com/openeuler2020/team-1269929257.git
-ln -s /home/openlkadmin/team-1269929257/hetu-hwcface/target/hetu-hwcface-1.0.1 /opt/openlookeng/hetu-server-1.0.1/plugin/hwcface
+ln -s /home/openlkadmin/team-1269929257/hetu-cloudface/target/hetu-cloudface-1.0.1 /opt/openlookeng/hetu-server-1.0.1/plugin/cloudface
 
 # restart hetu-server and open cli
 bash /opt/openlookeng/bin/auxiliary_tools/launcher.sh restart
@@ -187,7 +204,9 @@ bash /opt/openlookeng/bin/openlk-cli
 ## 使用说明
 
 ### 1.  云主机展示
-为提供可运行的demo, 本项目迁移到鹏城实验室的云主机上用于展示(`ssh openlkadmin@210.22.22.150 -p 3652 # usr:pwd = openlkadmin:olk || root:root`). 云主机上已完成前述所有安装步骤, 可以直接使用. 使用步骤同[介绍](#intro)章节的展示视频.
+为提供可运行的demo, 本项目迁移到鹏城实验室的云主机上用于展示(`ssh openlkadmin@210.22.22.150 -p 3652 # usr:pwd = openlkadmin:olk || root:root`). 
+
+云主机上已完成前述所有安装步骤, 可以直接使用. 使用步骤同[介绍](#intro)章节的展示视频.
 
 ### 2.  MySQL用户表构建
 
@@ -209,7 +228,9 @@ select * from user;
 
 ### 3.  UDF函数介绍
 
-UDF函数定义在`hetu-hwcface/src/main/java/io/hetu/core/plugin/hwcface/HwcFaceFunctions.java`, 有如下函数签名.
+![cloudface-arch](data/class_info.png)
+
+UDF函数定义在`hetu-cloudface/src/main/java/io/hetu/core/plugin/cloudface/`,分布在三个函数类（人脸库函数类、人脸函数类、人脸识别函数类）里面， 有如下函数签名.
 
 ```java
 // 测试函数, 返回字符串长度
@@ -260,43 +281,43 @@ UDF函数定义在`hetu-hwcface/src/main/java/io/hetu/core/plugin/hwcface/HwcFac
 
 ### 4.  UDF函数使用
 
-可以通过`hwcface.<FunctionName>`在openLooKeng CLI中调用对应函数, 每个函数的使用测试见`scripts/test_face_udf.sql`
+可以通过`cloudface.<FunctionName>`在openLooKeng CLI中调用对应函数, 每个函数的使用测试见`scripts/test_face_udf.sql`
 
 ```sql
--- # test hwcface
-select hwcface.Test('return length of this string');
+-- # test cloudface
+select cloudface.Test('return length of this string');
 
 -- # new face set
-select hwcface.NewFaceSet('pml-test-faceset');
+select cloudface.NewFaceSet('pml-test-faceset');
 
 -- # add faces
 -- ## add zhangsan's face
 select id, facepath FROM mysql.pml.user where name = '张三';
 -- filling MANUALLY
-select hwcface.AddFace('pml-test-faceset', '/home/openlkadmin/team-1269929257/data/luoxiang.jpg', 1001);
+select cloudface.AddFace('pml-test-faceset', '/home/openlkadmin/team-1269929257/data/luoxiang.jpg', 1001);
 -- ## add zhangsan's face
 select id, facepath FROM mysql.pml.user where name = '李四';
 -- filling MANUALLY
-select hwcface.AddFace('pml-test-faceset', '/home/openlkadmin/team-1269929257/data/luoyonghao.jpg', 1002);
+select cloudface.AddFace('pml-test-faceset', '/home/openlkadmin/team-1269929257/data/luoyonghao.jpg', 1002);
 
 -- # search who
-select name from mysql.pml.user where id = hwcface.SearchFace('pml-test-faceset', 'https://pic3.zhimg.com/v2-c3b1ad8057c14fc8cf6520702a307798_xl.jpg'); -- luoxiang -> zhangsan
-select name from mysql.pml.user where id = hwcface.SearchFace('pml-test-faceset', 'https://pic4.zhimg.com/80/v2-6d6224abdb7134a78e40430bdc690c0e_400x224.jpg'); -- luoyonghao -> lisi
-select name from mysql.pml.user where id = hwcface.SearchFace('pml-test-faceset', 'https://pic3.zhimg.com/80/v2-36c2f0f917e0a47440593a2c51dc5769_qhd.jpg'); -- Trump -> none
+select name from mysql.pml.user where id = cloudface.SearchFace('pml-test-faceset', 'https://pic3.zhimg.com/v2-c3b1ad8057c14fc8cf6520702a307798_xl.jpg'); -- luoxiang -> zhangsan
+select name from mysql.pml.user where id = cloudface.SearchFace('pml-test-faceset', 'https://pic4.zhimg.com/80/v2-6d6224abdb7134a78e40430bdc690c0e_400x224.jpg'); -- luoyonghao -> lisi
+select name from mysql.pml.user where id = cloudface.SearchFace('pml-test-faceset', 'https://pic3.zhimg.com/80/v2-36c2f0f917e0a47440593a2c51dc5769_qhd.jpg'); -- Trump -> none
 
 -- # scan who
-select name from mysql.pml.user where id = hwcface.FaceScan('https://pic3.zhimg.com/v2-c3b1ad8057c14fc8cf6520702a307798_xl.jpg'); -- luoxiang -> zhangsan
+select name from mysql.pml.user where id = cloudface.FaceScan('https://pic3.zhimg.com/v2-c3b1ad8057c14fc8cf6520702a307798_xl.jpg'); -- luoxiang -> zhangsan
 
 -- # delete face
-select hwcface.DelFace('pml-test-faceset', 1001);
+select cloudface.DelFace('pml-test-faceset', 1001);
 
 --# delete face set
-select hwcface.DelFaceSet('pml-test-faceset');
+select cloudface.DelFaceSet('pml-test-faceset');
 ```
 
 云主机上保留有人脸库, 可以直接进行人脸识别, 会有如下结果.
 
-![demo_result](data/hwcface_demo_result.png)
+![demo_result](data/cloudface_demo_result.png)
 
 
 ## 特技
