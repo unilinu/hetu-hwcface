@@ -6,7 +6,7 @@
 > TEAM_ID:1269929257
 > TEAM_NAME: 紫金山实验室-北京邮电大学小分队
 
-模拟公司考勤打卡场景，利用华为云[人脸识别服务(FRS)](https://support.huaweicloud.com/face/index.html)和openLooKeng[用户自定义SQL函数(UDF)](https://openlookeng.io/zh-cn/docs/docs/develop/functions.html)，实现。
+模拟公司考勤打卡场景，利用华为云[人脸识别服务(FRS)](https://support.huaweicloud.com/face/index.html)和openLooKeng[用户自定义SQL函数(UDF)](https://openlookeng.io/zh-cn/docs/docs/develop/functions.html)实现。
 
 根据[题目描述](https://www.oschina.net/question/4469669_2319949)设计AddFaceSet, AddFace, DelFace, DelFaceSet等基础函数构建人脸库，据此设计SearchFace以及赛题要求FaceScan函数进行人脸识别，并以插件形式集成在openLooKeng服务器上，可以通过CLI进行查询，完成赛题要求。
 
